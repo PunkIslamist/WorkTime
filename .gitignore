@@ -1,0 +1,12 @@
+#Folders
+
+build/
+.idea/
+.gradle/
+
+#Files
+
+*.jar
+*.iml
+local.properties
+gradle.properties
