@@ -5,20 +5,14 @@ import android.database.Cursor
 import org.joda.time.DateTime
 import java.io.Closeable
 
-class WorkTimeStorage(context: Context) : Closeable {
+class WorkTimeStorage(context: Context) : Closeable, WorkTimeRepository {
     private val repository = Database(context).writableDatabase
 
-    /**
-     * Log the current time to the storage.
-     */
-    fun log() {
-        this.repository.execSQL("INSERT INTO TimeLogEntry (Timestamp) VALUES (strftime('%s','now'))")
+    override fun write(timestamp: DateTime) {
+        this.repository.execSQL("INSERT INTO TimeLogEntry (Timestamp) VALUES (strftime('%s','$timestamp'))")
     }
 
-    /**
-     * Get all log entries in the storage.
-     */
-    fun getAll(): List<DateTime> {
+    override fun readAll(): List<DateTime> {
         val entries = MutableList(0, { DateTime() })
         val allTimeLogEntries = this.repository.query(
                 "TimeLogEntry", null, null, null, null, null, "Timestamp DESC", null)
@@ -30,7 +24,6 @@ class WorkTimeStorage(context: Context) : Closeable {
                 entries.add(this.asDateTime(it, columnIndex))
             }
         }
-
 
         return entries
     }

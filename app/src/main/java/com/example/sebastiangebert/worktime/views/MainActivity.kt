@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         var entries: List<DateTime> = List(0, { DateTime() })
 
         storage.use {
-            entries = storage.getAll()
+            entries = storage.readAll()
         }
 
         text_logEntries.text = entries
@@ -32,6 +32,6 @@ class MainActivity : AppCompatActivity() {
 
     @Suppress("UNUSED_PARAMETER")
     fun logHandler(eventSource: View?) {
-        WorkTimeStorage(this).use { it.log() }
+        WorkTimeStorage(this).use { it.write(DateTime.now()) }
     }
 }
