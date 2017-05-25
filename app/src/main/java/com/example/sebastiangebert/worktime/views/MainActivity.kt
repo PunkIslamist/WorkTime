@@ -1,8 +1,10 @@
-package com.example.sebastiangebert.worktime
+package com.example.sebastiangebert.worktime.views
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.example.sebastiangebert.worktime.R
+import com.example.sebastiangebert.worktime.model.WorkTimeStorage
 import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
 
