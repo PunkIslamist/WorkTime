@@ -20,7 +20,8 @@ class WorkTimeStorage(context: Context) : Closeable {
      */
     fun getAll(): List<DateTime> {
         val entries = MutableList(0, { DateTime() })
-        val allTimeLogEntries = this.repository.query("TimeLogEntry", null, null, null, null, null, null, null)
+        val allTimeLogEntries = this.repository.query(
+                "TimeLogEntry", null, null, null, null, null, "Timestamp DESC", null)
 
         allTimeLogEntries.use {
             val columnIndex = allTimeLogEntries.getColumnIndex("Timestamp")

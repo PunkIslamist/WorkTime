@@ -2,6 +2,7 @@ package com.example.sebastiangebert.worktime
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
 
@@ -19,11 +20,16 @@ class MainActivity : AppCompatActivity() {
         var entries: List<DateTime> = List(0, { DateTime() })
 
         storage.use {
-            storage.log()
             entries = storage.getAll()
         }
 
-        text.text = entries
+        text_logEntries.text = entries
+                .take(5)
                 .fold("", { acc, curr -> "$acc\n$curr" })
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun logHandler(eventSource: View?) {
+        WorkTimeStorage(this).use { it.log() }
     }
 }
