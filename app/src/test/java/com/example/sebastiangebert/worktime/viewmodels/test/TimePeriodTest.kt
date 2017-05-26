@@ -4,30 +4,9 @@ import com.example.sebastiangebert.worktime.model.WorkTimeRepository
 import com.example.sebastiangebert.worktime.viewmodels.TimePeriod
 import org.joda.time.DateTime
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
 
-class RepoMock : WorkTimeRepository {
-    var entries = mutableListOf(
-            DateTime("2017-01-02T08:00:00"),
-            DateTime("2017-01-02T12:00:00"),
-
-            DateTime("2017-01-02T13:00:00"),
-            DateTime("2017-01-02T17:00:00"),
-
-            DateTime("2017-01-03T09:01:15"),
-            DateTime("2017-01-03T12:17:26"),
-
-            DateTime("2017-01-03T12:55:15"),
-            DateTime("2017-01-03T17:35:26"),
-
-            DateTime("2017-01-04T08:01:15"),
-            DateTime("2017-01-04T12:30:15"),
-
-            DateTime("2017-01-04T13:15:26"),
-            DateTime("2017-01-04T16:35:26")
-    )
-
+class RepoMock(var entries: MutableList<DateTime>) : WorkTimeRepository {
     override fun write(timestamp: DateTime) {
         this.entries.add(timestamp)
     }
@@ -36,18 +15,34 @@ class RepoMock : WorkTimeRepository {
 }
 
 class TimePeriodTest {
-    var instance = TimePeriod(RepoMock())
+    @Test
+    fun NoEndPointsSet_ReturnAllDateTimes() {
+        val expected = arrayOf(
+                DateTime("2017-01-02T08:00:00"),
+                DateTime("2017-01-02T17:00:00"),
+                DateTime("2017-01-03T09:01:15"),
+                DateTime("2017-01-03T17:35:26")
+        )
+        val testInstance = TimePeriod(RepoMock(expected.toMutableList()))
 
-    @Before
-    fun init() {
-        this.instance = TimePeriod(RepoMock())
+        val actual = testInstance.All.toTypedArray()
+
+        Assert.assertArrayEquals(expected, actual)
     }
 
     @Test
-    fun NoEndPointsSet_ReturnAllDateTimes() {
-        val expected = RepoMock().entries.toTypedArray()
+    fun MoveStartAhead_DontReturnEarlierEntries() {
+        val dates = arrayOf(
+                DateTime("2017-01-02T08:00:00"),
+                DateTime("2017-01-02T17:00:00"),
+                DateTime("2017-01-03T09:01:15"),
+                DateTime("2017-01-03T17:35:26")
+        )
+        val expected = dates.copyOfRange(2, 4)
+        val testInstance = TimePeriod(RepoMock(dates.toMutableList()))
 
-        val actual = this.instance.All.toTypedArray()
+        testInstance.Start = DateTime("2017-01-03")
+        val actual = testInstance.All.toTypedArray()
 
         Assert.assertArrayEquals(expected, actual)
     }
