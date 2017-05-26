@@ -8,23 +8,23 @@ import org.junit.Test
 
 class RepoMock : WorkTimeRepository {
     var entries = mutableListOf(
-            DateTime("2017-01-02 08:00:00"),
-            DateTime("2017-01-02 12:00:00"),
+            DateTime("2017-01-02T08:00:00"),
+            DateTime("2017-01-02T12:00:00"),
 
-            DateTime("2017-01-02 13:00:00"),
-            DateTime("2017-01-02 17:00:00"),
+            DateTime("2017-01-02T13:00:00"),
+            DateTime("2017-01-02T17:00:00"),
 
-            DateTime("2017-01-03 09:01:15"),
-            DateTime("2017-01-03 12:17:26"),
+            DateTime("2017-01-03T09:01:15"),
+            DateTime("2017-01-03T12:17:26"),
 
-            DateTime("2017-01-03 12:55:15"),
-            DateTime("2017-01-03 17:35:26"),
+            DateTime("2017-01-03T12:55:15"),
+            DateTime("2017-01-03T17:35:26"),
 
-            DateTime("2017-01-04 08:01:15"),
-            DateTime("2017-01-04 12:30:15"),
+            DateTime("2017-01-04T08:01:15"),
+            DateTime("2017-01-04T12:30:15"),
 
-            DateTime("2017-01-04 13:15:26"),
-            DateTime("2017-01-04 16:35:26")
+            DateTime("2017-01-04T13:15:26"),
+            DateTime("2017-01-04T16:35:26")
     )
 
     override fun write(timestamp: DateTime) {
@@ -32,8 +32,6 @@ class RepoMock : WorkTimeRepository {
     }
 
     override fun readAll() = this.entries
-
-
 }
 
 class TimePeriodTest {
