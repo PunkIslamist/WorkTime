@@ -8,7 +8,9 @@ import org.joda.time.DateTime
 class TimePeriod(val repository: WorkTimeRepository) : BaseObservable() {
     val All: ObservableArrayList<DateTime>
         get() {
-            val entries = this.repository.readAll().filter { it > this.Start }
+            val entries = this.repository
+                    .readAll()
+                    .filter { it >= this.Start && it < this.End }
             val updatedList = ObservableArrayList<DateTime>()
 
             updatedList.addAll(entries)
@@ -16,5 +18,6 @@ class TimePeriod(val repository: WorkTimeRepository) : BaseObservable() {
             return updatedList
         }
 
-    var Start = DateTime()
+    var Start = this.repository.readAll().first()
+    var End = this.repository.readAll().last().plusSeconds(1)
 }
