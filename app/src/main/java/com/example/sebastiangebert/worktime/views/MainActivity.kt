@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             entries = storage.readAll()
         }
 
-        text_logEntries.text = entries
+        this.text_logEntries.text = entries
                 .take(5)
                 .fold("", { acc, curr -> "$acc\n$curr" })
     }
