@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.example.sebastiangebert.worktime.R
 import com.example.sebastiangebert.worktime.model.WorkTimeStorage
-import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
 
 class MainActivity : AppCompatActivity() {
@@ -24,10 +23,6 @@ class MainActivity : AppCompatActivity() {
         storage.use {
             entries = storage.readAll()
         }
-
-        this.text_logEntries.text = entries
-                .take(5)
-                .fold("", { acc, curr -> "$acc\n$curr" })
     }
 
     @Suppress("UNUSED_PARAMETER")
