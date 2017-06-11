@@ -5,7 +5,7 @@ import android.databinding.ObservableArrayList
 import com.example.sebastiangebert.worktime.model.WorkTimeRepository
 import org.joda.time.DateTime
 
-class TimePeriod(val repository: WorkTimeRepository) : BaseObservable() {
+class TimePeriod(private val repository: WorkTimeRepository) : BaseObservable() {
     val All: ObservableArrayList<DateTime>
         get() {
             val entries = this.repository
