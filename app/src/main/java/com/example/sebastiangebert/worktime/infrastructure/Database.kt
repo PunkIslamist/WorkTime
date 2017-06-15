@@ -1,4 +1,4 @@
-package com.example.sebastiangebert.worktime.model
+package com.example.sebastiangebert.worktime.infrastructure
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

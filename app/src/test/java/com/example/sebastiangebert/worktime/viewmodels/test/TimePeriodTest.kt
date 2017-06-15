@@ -1,6 +1,6 @@
 package com.example.sebastiangebert.worktime.viewmodels.test
 
-import com.example.sebastiangebert.worktime.model.WorkTimeRepository
+import com.example.sebastiangebert.worktime.infrastructure.WorkTimeRepository
 import com.example.sebastiangebert.worktime.viewmodels.TimePeriod
 import org.joda.time.DateTime
 import org.junit.Assert

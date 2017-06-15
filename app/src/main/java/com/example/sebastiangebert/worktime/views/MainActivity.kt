@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.example.sebastiangebert.worktime.R
-import com.example.sebastiangebert.worktime.model.WorkTimeStorage
+import com.example.sebastiangebert.worktime.infrastructure.WorkTimeStorage
 import com.example.sebastiangebert.worktime.viewmodels.TimePeriod
 import com.example.sebastiangebert.worktime.views.LogEntries.LogEntryAdapter
 import kotlinx.android.synthetic.main.activity_main.*
