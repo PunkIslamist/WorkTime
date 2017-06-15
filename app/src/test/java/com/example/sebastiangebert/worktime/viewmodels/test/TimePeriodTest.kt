@@ -1,12 +1,12 @@
 package com.example.sebastiangebert.worktime.viewmodels.test
 
-import com.example.sebastiangebert.worktime.infrastructure.WorkTimeRepository
+import com.example.sebastiangebert.worktime.infrastructure.FlexTimeRepository
 import com.example.sebastiangebert.worktime.viewmodels.TimePeriod
 import org.joda.time.DateTime
 import org.junit.Assert
 import org.junit.Test
 
-class RepoMock(var entries: MutableList<DateTime>) : WorkTimeRepository {
+class RepoMock(var entries: MutableList<DateTime>) : FlexTimeRepository {
     override fun write(timestamp: DateTime) {
         this.entries.add(timestamp)
     }

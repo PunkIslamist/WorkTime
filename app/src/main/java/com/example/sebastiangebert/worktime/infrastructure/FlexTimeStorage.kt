@@ -5,7 +5,7 @@ import android.database.Cursor
 import org.joda.time.DateTime
 import java.io.Closeable
 
-class WorkTimeStorage(context: Context) : Closeable, WorkTimeRepository {
+class FlexTimeStorage(context: Context) : Closeable, FlexTimeRepository {
     private val repository = Database(context).writableDatabase
 
     override fun write(timestamp: DateTime) {

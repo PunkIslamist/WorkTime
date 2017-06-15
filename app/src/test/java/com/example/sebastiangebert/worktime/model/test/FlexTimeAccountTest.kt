@@ -1,14 +1,14 @@
 package com.example.sebastiangebert.worktime.model.test
 
-import com.example.sebastiangebert.worktime.infrastructure.WorkTimeRepository
-import com.example.sebastiangebert.worktime.model.TimeLogBank
+import com.example.sebastiangebert.worktime.infrastructure.FlexTimeRepository
+import com.example.sebastiangebert.worktime.model.FlexTimeAccount
 import org.joda.time.DateTime
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class TimeLogBankTest {
-    companion object TestRepo : WorkTimeRepository {
+class FlexTimeAccountTest {
+    companion object TestRepo : FlexTimeRepository {
         var Entries: MutableList<DateTime> = MutableList(0, { DateTime() })
 
         override fun write(timestamp: DateTime) {
@@ -18,7 +18,7 @@ class TimeLogBankTest {
         override fun readAll() = this.Entries.toList()
     }
 
-    val bank = TimeLogBank(TestRepo)
+    val bank = FlexTimeAccount(TestRepo)
     val start = "1990-01-01"
 
     @Before

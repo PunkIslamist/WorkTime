@@ -2,10 +2,10 @@ package com.example.sebastiangebert.worktime.viewmodels
 
 import android.databinding.BaseObservable
 import android.databinding.ObservableArrayList
-import com.example.sebastiangebert.worktime.infrastructure.WorkTimeRepository
+import com.example.sebastiangebert.worktime.infrastructure.FlexTimeRepository
 import org.joda.time.DateTime
 
-class TimePeriod(private val repository: WorkTimeRepository) : BaseObservable() {
+class TimePeriod(private val repository: FlexTimeRepository) : BaseObservable() {
     val All: ObservableArrayList<DateTime>
         get() {
             val entries = this.repository
