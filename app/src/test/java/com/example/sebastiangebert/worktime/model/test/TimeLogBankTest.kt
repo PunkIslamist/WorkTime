@@ -19,6 +19,7 @@ class TimeLogBankTest {
     }
 
     val bank = TimeLogBank(TestRepo)
+    val start = "1990-01-01"
 
     @Before
     fun Setup() {
@@ -46,7 +47,7 @@ class TimeLogBankTest {
 
     @Test
     fun MultipleEntries_Get_ReturnAllEntries() {
-        val expected = List(1000, { DateTime() })
+        val expected = this.testValues(1000)
         TestRepo.Entries = expected.toMutableList()
 
         val actual = bank.Entries
@@ -56,7 +57,7 @@ class TimeLogBankTest {
 
     @Test
     fun NoEntries_AddOne_ReturnOneEntry() {
-        val date = DateTime("1990-01-01")
+        val date = DateTime(this.start)
         val expected = listOf(date)
 
         bank.Add(date)
@@ -64,4 +65,56 @@ class TimeLogBankTest {
 
         assertEquals(expected, actual)
     }
+
+    @Test
+    fun OneEntry_AddOne_ReturnTwoEntries() {
+        TestRepo.write(DateTime(this.start))
+        val expected = this.testValues(2)
+
+        bank.Add(DateTime(this.start).plusDays(1))
+        val actual = bank.Entries
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun OneEntry_AddMultiple_ReturnOnePlusMultipleEntries() {
+        TestRepo.write(DateTime(this.start))
+        val expected = this.testValues(1001)
+
+        List(1000, { DateTime(this.start).plusDays(it + 1) })
+                .forEach { bank.Add(it) }
+        val actual = bank.Entries
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun MultipleEntries_AddOne_ReturnMultiplePlusOneEntries() {
+        this.testValues(1000)
+                .forEach { TestRepo.write(it) }
+        val expected = TestRepo.Entries
+                .plus(DateTime(this.start).plusDays(1000))
+
+        bank.Add(DateTime(this.start).plusDays(1000))
+        val actual = bank.Entries
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun MultipleEntries_AddMultiple_ReturnMultiplePlusMultipleEntries() {
+        this.testValues(1000)
+                .forEach { TestRepo.write(it) }
+        val expected = this.testValues(1000)
+                .plus(TestRepo.Entries)
+
+        this.testValues(1000)
+                .forEach { bank.Add(it) }
+        val actual = bank.Entries
+
+        assertEquals(expected, actual)
+    }
+
+    fun testValues(days: Int) = List(days, { DateTime(this.start).plusDays(it) })
 }
