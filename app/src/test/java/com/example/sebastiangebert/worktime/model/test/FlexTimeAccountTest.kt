@@ -36,7 +36,7 @@ class FlexTimeAccountTest {
     }
 
     @Test
-    fun SingleEntry_Get_ReturnSingleEntry() {
+    fun OneEntry_Get_ReturnOneEntry() {
         val expected = List(1, { DateTime() })
         TestRepo.Entries = expected.toMutableList()
 
@@ -56,10 +56,59 @@ class FlexTimeAccountTest {
     }
 
     @Test
+    fun NoEntries_GetWithFromParameter_ReturnEmptyList() {
+        val expected = List(0, { DateTime() })
+
+        val actual = account.entriesInInterval(from = DateTime(this.start))
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun OneEntry_GetFromEarliestPossibleDate_ReturnOneEntry() {
+        val expected = testValues(1)
+        TestRepo.Entries = expected.toMutableList()
+
+        val actual = account.entriesInInterval(from = DateTime(0))
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun MultipleEntries_GetFromEarliestPossibleDate_ReturnMultipleEntries() {
+        val expected = testValues(1000)
+        TestRepo.Entries = expected.toMutableList()
+
+        val actual = account.entriesInInterval(from = DateTime(0))
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun NoEntries_GetWithoutParameters_ReturnEmptyList() {
         val expected = List(0, { DateTime() })
 
-        val actual = account.entriesInPeriod()
+        val actual = account.entriesInInterval()
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun OneEntry_GetWithoutParameters_ReturnOneEntry() {
+        val expected = testValues(1)
+        TestRepo.Entries = expected.toMutableList()
+
+        val actual = account.entriesInInterval()
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun MultipleEntries_GetWithoutParameters_ReturnMultipleEntries() {
+        val expected = testValues(1000)
+        TestRepo.Entries = expected.toMutableList()
+
+        val actual = account.entriesInInterval()
 
         assertEquals(expected, actual)
     }
