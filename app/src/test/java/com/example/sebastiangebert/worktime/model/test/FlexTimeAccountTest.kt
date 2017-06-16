@@ -18,7 +18,7 @@ class FlexTimeAccountTest {
         override fun readAll() = this.Entries.toList()
     }
 
-    val bank = FlexTimeAccount(TestRepo)
+    val account = FlexTimeAccount(TestRepo)
     val start = "1990-01-01"
 
     @Before
@@ -30,7 +30,7 @@ class FlexTimeAccountTest {
     fun NoEntries_Get_ReturnEmptyList() {
         val expected = List(0, { DateTime() })
 
-        val actual = bank.Entries
+        val actual = account.Entries
 
         assertEquals(expected, actual)
     }
@@ -40,7 +40,7 @@ class FlexTimeAccountTest {
         val expected = List(1, { DateTime() })
         TestRepo.Entries = expected.toMutableList()
 
-        val actual = bank.Entries
+        val actual = account.Entries
 
         assertEquals(expected, actual)
     }
@@ -50,7 +50,16 @@ class FlexTimeAccountTest {
         val expected = this.testValues(1000)
         TestRepo.Entries = expected.toMutableList()
 
-        val actual = bank.Entries
+        val actual = account.Entries
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun NoEntries_GetWithoutParameters_ReturnEmptyList() {
+        val expected = List(0, { DateTime() })
+
+        val actual = account.entriesInPeriod()
 
         assertEquals(expected, actual)
     }
@@ -60,8 +69,8 @@ class FlexTimeAccountTest {
         val date = DateTime(this.start)
         val expected = listOf(date)
 
-        bank.add(date)
-        val actual = bank.Entries
+        account.add(date)
+        val actual = account.Entries
 
         assertEquals(expected, actual)
     }
@@ -71,8 +80,8 @@ class FlexTimeAccountTest {
         TestRepo.write(DateTime(this.start))
         val expected = this.testValues(2)
 
-        bank.add(DateTime(this.start).plusDays(1))
-        val actual = bank.Entries
+        account.add(DateTime(this.start).plusDays(1))
+        val actual = account.Entries
 
         assertEquals(expected, actual)
     }
@@ -83,8 +92,8 @@ class FlexTimeAccountTest {
         val expected = this.testValues(1001)
 
         List(1000, { DateTime(this.start).plusDays(it + 1) })
-                .forEach { bank.add(it) }
-        val actual = bank.Entries
+                .forEach { account.add(it) }
+        val actual = account.Entries
 
         assertEquals(expected, actual)
     }
@@ -96,8 +105,8 @@ class FlexTimeAccountTest {
         val expected = TestRepo.Entries
                 .plus(DateTime(this.start).plusDays(1000))
 
-        bank.add(DateTime(this.start).plusDays(1000))
-        val actual = bank.Entries
+        account.add(DateTime(this.start).plusDays(1000))
+        val actual = account.Entries
 
         assertEquals(expected, actual)
     }
@@ -110,8 +119,8 @@ class FlexTimeAccountTest {
                 .plus(TestRepo.Entries)
 
         this.testValues(1000)
-                .forEach { bank.add(it) }
-        val actual = bank.Entries
+                .forEach { account.add(it) }
+        val actual = account.Entries
 
         assertEquals(expected, actual)
     }
