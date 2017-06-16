@@ -7,7 +7,7 @@ class FlexTimeAccount(val repository: FlexTimeRepository) {
     val Entries: List<DateTime>
         get() = this.repository.readAll()
 
-    fun Add(entry: DateTime) {
+    fun add(entry: DateTime) {
         this.repository.write(entry)
     }
 }
