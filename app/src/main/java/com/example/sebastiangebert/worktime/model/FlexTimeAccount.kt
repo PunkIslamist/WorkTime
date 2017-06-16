@@ -5,6 +5,7 @@ import org.joda.time.DateTime
 import org.joda.time.Interval
 
 class FlexTimeAccount(val repository: FlexTimeRepository) {
+    // TODO remove
     val Entries: List<DateTime>
         get() = this.repository.readAll()
 
@@ -12,8 +13,8 @@ class FlexTimeAccount(val repository: FlexTimeRepository) {
         this.repository.write(entry)
     }
 
-    fun entriesInInterval(from: DateTime = DateTime(0), to: DateTime = DateTime.now()) =
-            this.entriesInInterval(Interval(from, to))
+    fun entriesInInterval(from: DateTime = DateTime(0), upTo: DateTime = DateTime.now()) =
+            this.entriesInInterval(Interval(from, upTo))
 
     fun entriesInInterval(interval: Interval) =
             this.repository
