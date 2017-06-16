@@ -10,4 +10,9 @@ class FlexTimeAccount(val repository: FlexTimeRepository) {
     fun add(entry: DateTime) {
         this.repository.write(entry)
     }
+
+    fun entriesInPeriod(from: DateTime = DateTime(0), to: DateTime = DateTime.now())
+            : List<DateTime> {
+        TODO("not implemented")
+    }
 }
