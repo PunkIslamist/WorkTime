@@ -1,5 +1,6 @@
 package com.example.sebastiangebert.worktime.infrastructure
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import org.joda.time.DateTime
@@ -9,7 +10,10 @@ class FlexTimeStorage(context: Context) : Closeable, FlexTimeRepository {
     private val repository = Database(context).writableDatabase
 
     override fun write(timestamp: DateTime) {
-        this.repository.execSQL("INSERT INTO TimeLogEntry (Timestamp) VALUES (strftime('%s','$timestamp'))")
+        val values = ContentValues(1)
+        values.put("Timestamp", timestamp.toUnixTime())
+
+        this.repository.insertOrThrow("TimeLogEntry", null, values)
     }
 
     override fun readAll(): List<DateTime> {
@@ -46,4 +50,6 @@ class FlexTimeStorage(context: Context) : Closeable, FlexTimeRepository {
     private fun asUnixTimestamp(cursor: Cursor, columnIndex: Int): Long {
         return cursor.getInt(columnIndex).toLong() * 1000
     }
+
+    private fun DateTime.toUnixTime() = this.millis / 1000
 }
