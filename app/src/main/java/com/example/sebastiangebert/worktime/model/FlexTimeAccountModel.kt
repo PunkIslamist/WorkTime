@@ -1,20 +1,21 @@
 package com.example.sebastiangebert.worktime.model
 
 import com.example.sebastiangebert.worktime.infrastructure.FlexTimeRepository
+import com.example.sebastiangebert.worktime.model.interfaces.FlexTimeAccount
 import org.joda.time.DateTime
 
-class FlexTimeAccount(val repository: FlexTimeRepository) {
-    fun addEntryNow(): DateTime {
+class FlexTimeAccountModel(val repository: FlexTimeRepository) : FlexTimeAccount {
+    override fun addEntryNow(): DateTime {
         val entry = DateTime.now()
         this.repository.write(entry)
 
         return entry
     }
 
-    fun entriesInInterval(from: DateTime = DateTime(0), to: DateTime = DateTime.now()) =
+    override fun entriesInInterval(from: DateTime, to: DateTime) =
             this.entriesInInterval(from..to)
 
-    fun entriesInInterval(interval: ClosedRange<DateTime>) =
+    override fun entriesInInterval(interval: ClosedRange<DateTime>) =
             this.repository
                     .readAll()
                     .filter { it in interval }
