@@ -4,14 +4,6 @@ import com.example.sebastiangebert.worktime.infrastructure.FlexTimeRepository
 import org.joda.time.DateTime
 
 class FlexTimeAccount(val repository: FlexTimeRepository) {
-    // TODO remove
-    val Entries: List<DateTime>
-        get() = this.repository.readAll()
-
-    fun add(entry: DateTime) {
-        this.repository.write(entry)
-    }
-
     fun addEntryNow(): DateTime {
         val entry = DateTime.now()
         this.repository.write(entry)

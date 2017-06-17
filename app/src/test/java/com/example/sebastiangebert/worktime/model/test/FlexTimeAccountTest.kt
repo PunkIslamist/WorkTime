@@ -26,37 +26,6 @@ class FlexTimeAccountTest {
         TestRepo.Entries = MutableList(0, { DateTime() })
     }
 
-    //region Get
-    @Test
-    fun NoEntries_Get_ReturnEmptyList() {
-        val expected = List(0, { DateTime() })
-
-        val actual = account.Entries
-
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun OneEntry_Get_ReturnOneEntry() {
-        val expected = List(1, { DateTime() })
-        TestRepo.Entries = expected.toMutableList()
-
-        val actual = account.Entries
-
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun MultipleEntries_Get_ReturnAllEntries() {
-        val expected = this.testValues(1000)
-        TestRepo.Entries = expected.toMutableList()
-
-        val actual = account.Entries
-
-        assertEquals(expected, actual)
-    }
-    //endregion
-
     //region GetWithoutParams
     @Test
     fun NoEntries_GetWithoutParameters_ReturnEmptyList() {
@@ -276,25 +245,21 @@ class FlexTimeAccountTest {
     @Test
     fun OneEntry_AddMultiple_ReturnOnePlusMultipleEntries() {
         TestRepo.write(this.start)
-        val expected = this.testValues(1001)
+        val expected = 1001
 
-        List(1000, { this.start.plusDays(it + 1) })
-                .forEach { account.add(it) }
-        val actual = account.Entries
+        for (i in 1..1000) account.addEntryNow()
+        val actual = account.entriesInInterval().count()
 
         assertEquals(expected, actual)
     }
 
     @Test
     fun MultipleEntries_AddMultiple_ReturnMultiplePlusMultipleEntries() {
-        this.testValues(1000)
-                .forEach { TestRepo.write(it) }
-        val expected = this.testValues(1000)
-                .plus(TestRepo.Entries)
+        TestRepo.Entries = this.testValues(1000).toMutableList()
+        val expected = 2000
 
-        this.testValues(1000)
-                .forEach { account.add(it) }
-        val actual = account.Entries
+        for (i in 1..1000) account.addEntryNow()
+        val actual = account.entriesInInterval().count()
 
         assertEquals(expected, actual)
     }
