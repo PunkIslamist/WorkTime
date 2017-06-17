@@ -2,7 +2,6 @@ package com.example.sebastiangebert.worktime.model
 
 import com.example.sebastiangebert.worktime.infrastructure.FlexTimeRepository
 import org.joda.time.DateTime
-import org.joda.time.Interval
 
 class FlexTimeAccount(val repository: FlexTimeRepository) {
     // TODO remove
@@ -13,11 +12,11 @@ class FlexTimeAccount(val repository: FlexTimeRepository) {
         this.repository.write(entry)
     }
 
-    fun entriesInInterval(from: DateTime = DateTime(0), upTo: DateTime = DateTime.now()) =
-            this.entriesInInterval(Interval(from, upTo))
+    fun entriesInInterval(from: DateTime = DateTime(0), to: DateTime = DateTime.now()) =
+            this.entriesInInterval(from..to)
 
-    fun entriesInInterval(interval: Interval) =
+    fun entriesInInterval(interval: ClosedRange<DateTime>) =
             this.repository
                     .readAll()
-                    .filter { interval.contains(it) }
+                    .filter { it in interval }
 }

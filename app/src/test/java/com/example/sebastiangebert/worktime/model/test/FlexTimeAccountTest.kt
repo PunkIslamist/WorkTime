@@ -19,7 +19,7 @@ class FlexTimeAccountTest {
     }
 
     val account = FlexTimeAccount(TestRepo)
-    val start = "1990-01-01"
+    val start = DateTime("1990-01-01")
 
     @Before
     fun Setup() {
@@ -78,7 +78,7 @@ class FlexTimeAccountTest {
     }
 
     @Test
-    fun MultipleEntries_GetWithoutParameters_ReturnMultipleEntries() {
+    fun MultipleEntries_GetWithoutParameters_ReturnAllEntries() {
         val expected = testValues(1000)
         TestRepo.Entries = expected.toMutableList()
 
@@ -91,7 +91,7 @@ class FlexTimeAccountTest {
     fun NoEntries_GetWithFromParameter_ReturnEmptyList() {
         val expected = List(0, { DateTime() })
 
-        val actual = account.entriesInInterval(from = DateTime(this.start))
+        val actual = account.entriesInInterval(from = this.start)
 
         assertEquals(expected, actual)
     }
@@ -113,13 +113,13 @@ class FlexTimeAccountTest {
         val expected = testValues(0)
         TestRepo.Entries = testValues(1).toMutableList()
 
-        val actual = account.entriesInInterval(from = DateTime(this.start).plusDays(1))
+        val actual = account.entriesInInterval(from = this.start.plusDays(1))
 
         assertEquals(expected, actual)
     }
 
     @Test
-    fun MultipleEntries_GetFromEarliestPossibleDate_ReturnMultipleEntries() {
+    fun MultipleEntries_GetFromEarliestPossibleDate_ReturnAllEntries() {
         val expected = testValues(1000)
         TestRepo.Entries = expected.toMutableList()
 
@@ -133,7 +133,7 @@ class FlexTimeAccountTest {
         val expected = testValues(1000).takeLast(500)
         TestRepo.Entries = testValues(1000).toMutableList()
 
-        val actual = account.entriesInInterval(from = DateTime(this.start).plusDays(500))
+        val actual = account.entriesInInterval(from = this.start.plusDays(500))
 
         assertEquals(expected, actual)
     }
@@ -145,7 +145,7 @@ class FlexTimeAccountTest {
         val expected = testValues(1)
         TestRepo.Entries = expected.toMutableList()
 
-        val actual = account.entriesInInterval(upTo = DateTime.now())
+        val actual = account.entriesInInterval(to = DateTime.now())
 
         assertEquals(expected, actual)
     }
@@ -155,17 +155,17 @@ class FlexTimeAccountTest {
         val expected = testValues(0)
         TestRepo.Entries = testValues(1).toMutableList()
 
-        val actual = account.entriesInInterval(upTo = DateTime(this.start).minusDays(1))
+        val actual = account.entriesInInterval(to = this.start.minusDays(1))
 
         assertEquals(expected, actual)
     }
 
     @Test
-    fun MultipleEntries_GetToLatestPossibleDate_ReturnMultipleEntries() {
+    fun MultipleEntries_GetToLatestPossibleDate_ReturnAllEntries() {
         val expected = testValues(1000)
         TestRepo.Entries = expected.toMutableList()
 
-        val actual = account.entriesInInterval(upTo = DateTime.now())
+        val actual = account.entriesInInterval(to = DateTime.now())
 
         assertEquals(expected, actual)
     }
@@ -175,7 +175,45 @@ class FlexTimeAccountTest {
         val expected = testValues(1000).take(500)
         TestRepo.Entries = testValues(1000).toMutableList()
 
-        val actual = account.entriesInInterval(upTo = DateTime(this.start).plusDays(500))
+        val actual = account.entriesInInterval(to = this.start.plusDays(499))
+
+        assertEquals(expected, actual)
+    }
+    //endregion
+
+    //region GetWithBothParameters
+    @Test
+    fun MultipleEntries_GetFromEarliestToLatestPossibleDate_ReturnAllEntries() {
+        val expected = testValues(1000)
+        TestRepo.Entries = expected.toMutableList()
+
+        val actual = account.entriesInInterval(from = this.start, to = this.start.plusDays(1000))
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun MultipleEntries_GetFromInterval_ReturnEntriesInInterval() {
+        val expected = testValues(1000).subList(300, 500)
+        TestRepo.Entries = testValues(1000).toMutableList()
+
+        val actual = account.entriesInInterval(
+                from = this.start.plusDays(300),
+                to = this.start.plusDays(499)
+        )
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun MultipleEntries_GetFromLaterDateToEarlierDate_ReturnEmptyList() {
+        val expected = testValues(0)
+        TestRepo.Entries = testValues(1000).toMutableList()
+
+        val actual = account.entriesInInterval(
+                from = this.start.plusDays(500),
+                to = this.start.plusDays(300)
+        )
 
         assertEquals(expected, actual)
     }
@@ -184,7 +222,7 @@ class FlexTimeAccountTest {
     //region AddOne
     @Test
     fun NoEntries_AddOne_ReturnOneEntry() {
-        val date = DateTime(this.start)
+        val date = this.start
         val expected = listOf(date)
 
         account.add(date)
@@ -195,10 +233,10 @@ class FlexTimeAccountTest {
 
     @Test
     fun OneEntry_AddOne_ReturnTwoEntries() {
-        TestRepo.write(DateTime(this.start))
+        TestRepo.write(this.start)
         val expected = this.testValues(2)
 
-        account.add(DateTime(this.start).plusDays(1))
+        account.add(this.start.plusDays(1))
         val actual = account.Entries
 
         assertEquals(expected, actual)
@@ -209,9 +247,9 @@ class FlexTimeAccountTest {
         this.testValues(1000)
                 .forEach { TestRepo.write(it) }
         val expected = TestRepo.Entries
-                .plus(DateTime(this.start).plusDays(1000))
+                .plus(this.start.plusDays(1000))
 
-        account.add(DateTime(this.start).plusDays(1000))
+        account.add(this.start.plusDays(1000))
         val actual = account.Entries
 
         assertEquals(expected, actual)
@@ -221,10 +259,10 @@ class FlexTimeAccountTest {
     //region AddMultiple
     @Test
     fun OneEntry_AddMultiple_ReturnOnePlusMultipleEntries() {
-        TestRepo.write(DateTime(this.start))
+        TestRepo.write(this.start)
         val expected = this.testValues(1001)
 
-        List(1000, { DateTime(this.start).plusDays(it + 1) })
+        List(1000, { this.start.plusDays(it + 1) })
                 .forEach { account.add(it) }
         val actual = account.Entries
 
@@ -246,5 +284,5 @@ class FlexTimeAccountTest {
     }
     //endregion
 
-    fun testValues(days: Int) = List(days, { DateTime(this.start).plusDays(it) })
+    fun testValues(days: Int) = List(days, { this.start.plusDays(it) })
 }
