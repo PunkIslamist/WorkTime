@@ -221,36 +221,52 @@ class FlexTimeAccountTest {
 
     //region AddOne
     @Test
-    fun NoEntries_AddOne_ReturnOneEntry() {
-        val date = this.start
-        val expected = listOf(date)
+    fun NoEntries_AddOne_OneEntry() {
+        val expected = 1
 
-        account.add(date)
-        val actual = account.Entries
-
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun OneEntry_AddOne_ReturnTwoEntries() {
-        TestRepo.write(this.start)
-        val expected = this.testValues(2)
-
-        account.add(this.start.plusDays(1))
-        val actual = account.Entries
+        account.addEntryNow()
+        val actual = account.entriesInInterval().count()
 
         assertEquals(expected, actual)
     }
 
     @Test
-    fun MultipleEntries_AddOne_ReturnMultiplePlusOneEntries() {
-        this.testValues(1000)
-                .forEach { TestRepo.write(it) }
-        val expected = TestRepo.Entries
-                .plus(this.start.plusDays(1000))
+    fun NoEntries_AddOne_ReturnAddedEntry() {
+        val expected = account.addEntryNow()
 
-        account.add(this.start.plusDays(1000))
-        val actual = account.Entries
+        val actual = account.entriesInInterval().last()
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun OneEntry_AddOne_TwoEntries() {
+        TestRepo.Entries = testValues(1).toMutableList()
+        val expected = 2
+
+        account.addEntryNow()
+        val actual = account.entriesInInterval().count()
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun OneEntry_AddOne_ReturnAddedEntry() {
+        TestRepo.Entries = testValues(1).toMutableList()
+
+        val expected = account.addEntryNow()
+        val actual = account.entriesInInterval().last()
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun MultipleEntries_AddOne_AllEntriesPlusOne() {
+        TestRepo.Entries = testValues(1000).toMutableList()
+        val expected = 1001
+
+        account.addEntryNow()
+        val actual = account.entriesInInterval().count()
 
         assertEquals(expected, actual)
     }

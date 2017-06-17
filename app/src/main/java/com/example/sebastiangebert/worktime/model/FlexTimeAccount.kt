@@ -12,6 +12,13 @@ class FlexTimeAccount(val repository: FlexTimeRepository) {
         this.repository.write(entry)
     }
 
+    fun addEntryNow(): DateTime {
+        val entry = DateTime.now()
+        this.repository.write(entry)
+
+        return entry
+    }
+
     fun entriesInInterval(from: DateTime = DateTime(0), to: DateTime = DateTime.now()) =
             this.entriesInInterval(from..to)
 
