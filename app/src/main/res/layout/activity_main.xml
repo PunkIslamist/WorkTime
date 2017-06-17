@@ -12,7 +12,8 @@
         android:id="@+id/recycler_logEntries"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/button_Log" />
 
     <Button
         android:id="@+id/button_Log"
