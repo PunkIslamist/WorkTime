@@ -8,6 +8,7 @@ import java.io.Closeable
 
 class FlexTimeStorage(context: Context) : Closeable, FlexTimeRepository {
     private val repository = Database(context).writableDatabase
+    private val cache = this.selectAll()
 
     override fun write(timestamp: DateTime) {
         val values = ContentValues(1)
@@ -16,7 +17,13 @@ class FlexTimeStorage(context: Context) : Closeable, FlexTimeRepository {
         this.repository.insertOrThrow("TimeLogEntry", null, values)
     }
 
-    override fun readAll(): List<DateTime> {
+    override fun readAll() = this.cache
+
+    override fun close() {
+        this.repository.close()
+    }
+
+    private fun selectAll(): List<DateTime> {
         val entries = MutableList(0, { DateTime() })
         val allTimeLogEntries = this.repository.query(
                 "TimeLogEntry", null, null, null, null, null, "Timestamp ASC", null)
@@ -29,11 +36,7 @@ class FlexTimeStorage(context: Context) : Closeable, FlexTimeRepository {
             }
         }
 
-        return entries
-    }
-
-    override fun close() {
-        this.repository.close()
+        return entries.toList()
     }
 
     private fun asDateTime(cursor: Cursor, columnIndex: Int): DateTime {
