@@ -96,4 +96,31 @@ class TimePeriodTest {
 
         Assert.assertArrayEquals(expected, actual)
     }
+
+    @Test
+    fun EmptyRepository_StartIsEpoch() {
+        val expected = DateTime(0)
+        val testInstance = TimePeriod(RepoMock(mutableListOf<DateTime>()))
+
+        val actual = testInstance.Start
+
+        Assert.assertTrue(actual.isEqual(expected))
+    }
+
+    @Test
+    fun EmptyRepository_EndIsNow() {
+        val testInstance = TimePeriod(RepoMock(mutableListOf<DateTime>()))
+
+        Assert.assertTrue(testInstance.End.isEqualNow)
+    }
+
+    @Test
+    fun EmptyRepository_AllIsEmpty() {
+        val expected = emptyArray<DateTime>()
+        val testInstance = TimePeriod(RepoMock(mutableListOf<DateTime>()))
+
+        val actual = testInstance.All.toArray()
+
+        Assert.assertArrayEquals(expected, actual)
+    }
 }
