@@ -26,6 +26,6 @@ class TimePeriod(private val repository: FlexTimeRepository) : BaseObservable() 
     var End = this.repository.readAll().let {
         if (it.any())
             it.last().plusSeconds(1)
-        else DateTime()
+        else DateTime(0)
     }
 }

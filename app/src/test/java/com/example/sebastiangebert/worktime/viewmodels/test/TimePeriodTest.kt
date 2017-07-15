@@ -108,10 +108,13 @@ class TimePeriodTest {
     }
 
     @Test
-    fun EmptyRepository_EndIsNow() {
+    fun EmptyRepository_EndIsEpoch() {
+        val expected = DateTime(0)
         val testInstance = TimePeriod(RepoMock(mutableListOf<DateTime>()))
 
-        Assert.assertTrue(testInstance.End.isEqualNow)
+        val actual = testInstance.End
+
+        Assert.assertTrue(actual.isEqual(expected))
     }
 
     @Test
