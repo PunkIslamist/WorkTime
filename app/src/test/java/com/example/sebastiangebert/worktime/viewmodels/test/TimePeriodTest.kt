@@ -113,7 +113,7 @@ class TimePeriodTest {
         val expected = emptyArray<DateTime>()
         val testInstance = TimePeriod(RepoMock(mutableListOf<DateTime>()))
 
-        val actual = testInstance.All.toArray()
+        val actual = testInstance.All.toTypedArray()
 
         Assert.assertArrayEquals(expected, actual)
     }
