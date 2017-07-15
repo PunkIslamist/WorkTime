@@ -9,22 +9,22 @@ class TimePeriod(private val repository: FlexTimeRepository) : BaseObservable() 
     val All: ObservableArrayList<DateTime>
         get() {
             val entries = this.repository
-                    .filter { it >= this.Start && it < this.End }
+                    .filter { it >= this.Start && it <= this.End }
             val updatedList = ObservableArrayList<DateTime>()
 
             updatedList.addAll(entries)
             return updatedList
         }
 
-    var Start = this.repository.let {
+    var Start: DateTime = this.repository.let {
         if (it.any())
             it.first()
         else DateTime(0)
     }
 
-    var End = this.repository.let {
+    var End: DateTime = this.repository.let {
         if (it.any())
-            it.last().plusSeconds(1)
+            it.last()
         else DateTime(0)
     }
 }
