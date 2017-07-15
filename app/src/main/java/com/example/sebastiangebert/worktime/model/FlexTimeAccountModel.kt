@@ -7,7 +7,7 @@ import org.joda.time.DateTime
 class FlexTimeAccountModel(val repository: FlexTimeRepository) : FlexTimeAccount {
     override fun addEntryNow(): DateTime {
         val entry = DateTime.now()
-        this.repository.write(entry)
+        this.repository.add(entry)
 
         return entry
     }
@@ -16,7 +16,5 @@ class FlexTimeAccountModel(val repository: FlexTimeRepository) : FlexTimeAccount
             this.entriesInInterval(from..to)
 
     override fun entriesInInterval(interval: ClosedRange<DateTime>) =
-            this.repository
-                    .readAll()
-                    .filter { it in interval }
+            this.repository.filter { it in interval }
 }

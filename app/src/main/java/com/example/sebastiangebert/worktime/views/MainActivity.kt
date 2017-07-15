@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.example.sebastiangebert.worktime.R
 import com.example.sebastiangebert.worktime.infrastructure.FlexTimeStorage
+import com.example.sebastiangebert.worktime.infrastructure.SqliteDatabase
 import com.example.sebastiangebert.worktime.viewmodels.TimePeriod
 import com.example.sebastiangebert.worktime.views.LogEntries.LogEntryAdapter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val storage = FlexTimeStorage(this)
+        val storage = FlexTimeStorage(SqliteDatabase(this))
         recycler_logEntries.adapter = LogEntryAdapter(TimePeriod(storage))
     }
 
@@ -26,6 +27,6 @@ class MainActivity : AppCompatActivity() {
 
     @Suppress("UNUSED_PARAMETER")
     fun logHandler(eventSource: View?) {
-        FlexTimeStorage(this).use { it.write(DateTime.now()) }
+        FlexTimeStorage(SqliteDatabase(this)).add(DateTime.now())
     }
 }

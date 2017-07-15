@@ -1,57 +1,64 @@
 package com.example.sebastiangebert.worktime.infrastructure
 
-import android.content.ContentValues
-import android.content.Context
-import android.database.Cursor
 import org.joda.time.DateTime
-import java.io.Closeable
 
-class FlexTimeStorage(context: Context) : Closeable, FlexTimeRepository {
-    private val repository = Database(context).writableDatabase
-    private val cache = this.selectAll()
+class FlexTimeStorage(private val database: Database) : FlexTimeRepository {
+    override val size: Int
+        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
-    override fun write(timestamp: DateTime) {
-        val values = ContentValues(1)
-        values.put("Timestamp", timestamp.toUnixTime())
-
-        this.repository.insertOrThrow("TimeLogEntry", null, values)
+    override fun contains(element: DateTime): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun readAll() = this.cache
-
-    override fun close() {
-        this.repository.close()
+    override fun containsAll(elements: Collection<DateTime>): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    private fun selectAll(): List<DateTime> {
-        val entries = MutableList(0, { DateTime() })
-        val allTimeLogEntries = this.repository.query(
-                "TimeLogEntry", null, null, null, null, null, "Timestamp ASC", null)
-
-        allTimeLogEntries.use {
-            val columnIndex = allTimeLogEntries.getColumnIndex("Timestamp")
-
-            while (allTimeLogEntries.moveToNext()) {
-                entries.add(this.asDateTime(it, columnIndex))
-            }
-        }
-
-        return entries.toList()
+    override fun isEmpty(): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    private fun asDateTime(cursor: Cursor, columnIndex: Int): DateTime {
-        val timestamp = this.asUnixTimestamp(cursor, columnIndex)
+    override fun add(element: DateTime): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun addAll(elements: Collection<DateTime>): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun clear() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun iterator(): MutableIterator<DateTime> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun remove(element: DateTime): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun removeAll(elements: Collection<DateTime>): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun retainAll(elements: Collection<DateTime>): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun asDateTime(value: String): DateTime {
+        val timestamp = this.asUnixTimestamp(value)
 
         return DateTime(timestamp)
     }
 
     /**
-     * Returns the value of the specified column of the current row as a unix timestamp value.
+     * Returns the value as a unix timestamp value.
      * SQLite saves the unix timestamp without milliseconds,
      * but Joda-Time expects a millisecond resolution.
      */
-    private fun asUnixTimestamp(cursor: Cursor, columnIndex: Int): Long {
-        return cursor.getInt(columnIndex).toLong() * 1000
+    private fun asUnixTimestamp(value: String): Long {
+        return value.toLong() * 1000
     }
 
     private fun DateTime.toUnixTime() = this.millis / 1000

@@ -9,13 +9,50 @@ import org.junit.Test
 
 class FlexTimeAccountModelTest {
     companion object TestRepo : FlexTimeRepository {
-        var Entries: MutableList<DateTime> = MutableList(0, { DateTime() })
+        override val size: Int
+            get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
-        override fun write(timestamp: DateTime) {
-            this.Entries.add(timestamp)
+        override fun contains(element: DateTime): Boolean {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun readAll() = this.Entries.toList()
+        override fun containsAll(elements: Collection<DateTime>): Boolean {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun isEmpty(): Boolean {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun add(element: DateTime): Boolean {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun addAll(elements: Collection<DateTime>): Boolean {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun clear() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun iterator(): MutableIterator<DateTime> {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun remove(element: DateTime): Boolean {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun removeAll(elements: Collection<DateTime>): Boolean {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun retainAll(elements: Collection<DateTime>): Boolean {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        var Entries: MutableList<DateTime> = MutableList(0, { DateTime() })
     }
 
     val account = FlexTimeAccountModel(TestRepo)
@@ -244,7 +281,7 @@ class FlexTimeAccountModelTest {
     //region AddMultiple
     @Test
     fun OneEntry_AddMultiple_ReturnOnePlusMultipleEntries() {
-        TestRepo.write(this.start)
+        TestRepo.add(this.start)
         val expected = 1001
 
         for (i in 1..1000) account.addEntryNow()
